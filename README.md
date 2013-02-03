@@ -8,11 +8,11 @@ Setup
 
 2. Create database (change root according to your setup):
 
-    mysql -u root -p -e "CREATE DATABASE zend_rbac_test"
+    `mysql -u root -p -e "CREATE DATABASE zend_rbac_test"`
 
 3. Init tables:
 
-    php vendor/bin/doctrine-module orm:schema-tool:create
+    `php vendor/bin/doctrine-module orm:schema-tool:create`
 
 4. Open RbacTest in your browser, go to "registration page" (should be similar to http://localhost/zend-rbac-test/public/user/register)
 
@@ -20,6 +20,8 @@ Setup
 
 6. Experiment :-) following routes are available:
 
+    ```
     /public-area
     /members-only
     /administration
+    ```
