@@ -6,6 +6,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
 use Zend\Permissions\Rbac\Rbac;
+use Zend\Permissions\Rbac\Role;
 
 class Module
 {
@@ -39,7 +40,8 @@ class Module
                 'rbac' => function ($sm) {
                     $serviceLocator = $sm->getServiceLocator();
                     $rbac = $serviceLocator->get('Zend\Permissions\Rbac\Rbac');
-                    $plugin = new Controller\Plugin\Rbac($rbac);
+                    $authService = $serviceLocator->get('zfcuser_auth_service');
+                    $plugin = new Controller\Plugin\Rbac($rbac, $authService);
                     return $plugin;
                 },
             ),
@@ -53,9 +55,15 @@ class Module
                 'Zend\Permissions\Rbac\Rbac' => function() {
                     $rbac = new Rbac();
 
-                    $rbac->addRole('guest');
-                    $rbac->addRole('member', 'guest');
-                    $rbac->addRole('admin', 'member');
+                    $guest = new Role('guest');
+                    $member = new Role('member');
+                    $member->addPermission('member_access');
+                    $admin = new Role('admin');
+                    $admin->addPermission('admin_access');
+
+                    $rbac->addRole($guest);
+                    $rbac->addRole($member, 'guest');
+                    $rbac->addRole($admin, 'member');
 
                     return $rbac;
                 }
